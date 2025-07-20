@@ -44,7 +44,7 @@ dependencies {
     // Spotify SDK
     implementation 'com.spotify.android:auth:2.1.0'
     // Spotify App Remote AAR - download from Spotify Developer Portal
-    // implementation files('libs/spotify-app-remote-release-0.8.0.aar')
+    implementation files('libs/spotify-app-remote-release-0.8.0.aar')
     
     // Image loading
     implementation 'com.github.bumptech.glide:glide:4.16.0'
