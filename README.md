@@ -156,6 +156,15 @@ Set these in your repository settings under Secrets and Variables → Actions:
 
 ## 🔧 Troubleshooting
 
+### Build Issues
+
+If you encounter build failures, please refer to our comprehensive **[Build Troubleshooting Guide](BUILD_TROUBLESHOOTING.md)** which covers:
+
+- Network connectivity issues (firewall blocking `dl.google.com`)
+- Android SDK configuration problems
+- Memory and Gradle daemon issues
+- Environment-specific solutions for GitHub Actions, local development, and corporate networks
+
 ### Common Issues
 
 1. **Spotify Authentication Fails**
@@ -164,10 +173,9 @@ Set these in your repository settings under Secrets and Variables → Actions:
    - Check Client ID in the source code
 
 2. **Build Errors**
-   - **Network connectivity**: If you see "dl.google.com: Temporary failure in name resolution", this indicates the build environment cannot access Google's repositories. This is typically a firewall or network configuration issue.
+   - **Network connectivity**: See [Build Troubleshooting Guide](BUILD_TROUBLESHOOTING.md) for detailed solutions
    - **Local development**: Ensure you have a stable internet connection and check corporate firewall settings
-   - **GitHub Actions**: Ensure the runner environment has access to required domains (`dl.google.com`, `repo1.maven.org`)
-   - **Workaround**: Try building with a VPN or different network connection
+   - **GitHub Actions**: The workflow includes enhanced error handling and diagnostics
    - Ensure all dependencies are downloaded with: `./gradlew --refresh-dependencies clean build`
    - Check that Spotify App Remote AAR is in `app/libs/`
    - Verify Android SDK and build tools are updated
