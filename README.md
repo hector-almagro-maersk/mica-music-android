@@ -164,7 +164,11 @@ Set these in your repository settings under Secrets and Variables → Actions:
    - Check Client ID in the source code
 
 2. **Build Errors**
-   - Ensure all dependencies are downloaded
+   - **Network connectivity**: If you see "dl.google.com: Temporary failure in name resolution", this indicates the build environment cannot access Google's repositories. This is typically a firewall or network configuration issue.
+   - **Local development**: Ensure you have a stable internet connection and check corporate firewall settings
+   - **GitHub Actions**: Ensure the runner environment has access to required domains (`dl.google.com`, `repo1.maven.org`)
+   - **Workaround**: Try building with a VPN or different network connection
+   - Ensure all dependencies are downloaded with: `./gradlew --refresh-dependencies clean build`
    - Check that Spotify App Remote AAR is in `app/libs/`
    - Verify Android SDK and build tools are updated
 
@@ -172,6 +176,15 @@ Set these in your repository settings under Secrets and Variables → Actions:
    - Check device logs with `adb logcat`
    - Ensure minimum SDK version (API 24) is met
    - Verify permissions in AndroidManifest.xml
+
+### Network Requirements for Building
+
+The Android build system requires internet access to these domains:
+- `dl.google.com` - Android SDK components and Gradle Plugin
+- `repo1.maven.org` - Maven Central dependencies  
+- `services.gradle.org` - Gradle distributions
+
+If any of these are blocked by firewall rules, the build will fail with network connectivity errors.
 
 ### Debug Logs
 
