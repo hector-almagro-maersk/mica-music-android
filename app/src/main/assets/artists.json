@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Shakira",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5ebcc9dc00cad9092fdb3b137a0",
+    "spanishSong": "spotify:track:3sNVsP50132BTNlImLx70i",
+    "englishSong": "spotify:track:2dLLR6qlu5UJ5gk0dKz0h3"
+  },
+  {
+    "name": "Jesse & Joy",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5eba28a9ccb3bfe1c8e46fa8a7f",
+    "spanishSong": "spotify:track:4f9iBdXUYyNaK4sSLbhpSJ",
+    "englishSong": null
+  },
+  {
+    "name": "Luis Fonsi",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5ebb99cacf8acd5378206767261",
+    "spanishSong": "spotify:track:6habFhsOp2NvshLv26DqMb",
+    "englishSong": null
+  },
+  {
+    "name": "Ed Sheeran",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5eb95cf976d9ab7320469a00a29",
+    "spanishSong": null,
+    "englishSong": "spotify:track:7qiZfU4dY1lWllzX7mPBI3"
+  },
+  {
+    "name": "Taylor Swift",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+    "spanishSong": null,
+    "englishSong": "spotify:track:1BxfuPKGuaTgP7aM0Bbdwr"
+  },
+  {
+    "name": "Manu Chao",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5eb8ae7f2a9c057c0b4b7ac8cda",
+    "spanishSong": "spotify:track:6iFE5CRSXSQR6vEqxPWm4j",
+    "englishSong": "spotify:track:0jJe4iKLRnkFIW38V9tkbh"
+  }
+]
