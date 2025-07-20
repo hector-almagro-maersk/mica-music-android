@@ -86,7 +86,7 @@ jobs:
     - name: Build with Gradle
       run: |
         echo "Starting Gradle build with enhanced error handling..."
-        ./gradlew build --stacktrace --info --no-daemon || {
+        ./gradlew build --stacktrace --info --console=plain --no-daemon || {
           echo "Build failed. Checking for common issues..."
           echo "=== Gradle Daemon Status ==="
           ./gradlew --status || true
