@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+   Sample backup rules file; uncomment and customize as necessary.
+   See https://developer.android.com/guide/topics/manifest/application-element.html#allowbackup
+   for details.
+   Note: This file may be included in documentation including javadoc in which case the xml
+   comments will be stripped out, hence comments like this will be unrecognizable.  Please
+   configure the ProGuard to strip comments from this file.
+-->
+<full-backup-content>
+    <!--
+   <include domain="sharedpref" path="."/>
+   <exclude domain="sharedpref" path="device.xml"/>
+-->
+</full-backup-content>
