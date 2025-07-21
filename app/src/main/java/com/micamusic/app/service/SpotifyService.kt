@@ -5,8 +5,12 @@ import android.util.Log
 import android.os.PowerManager
 import com.micamusic.app.BuildConfig
 
-// Note: This is a simplified version. In production, uncomment the Spotify imports
-// and download the Spotify App Remote SDK from developer.spotify.com
+// Spotify Auth SDK for OAuth authentication
+import com.spotify.sdk.android.auth.AuthorizationClient
+import com.spotify.sdk.android.auth.AuthorizationRequest
+import com.spotify.sdk.android.auth.AuthorizationResponse
+
+// Spotify App Remote SDK
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -17,10 +21,19 @@ import com.spotify.protocol.types.Track
 class SpotifyService(private val context: Context) {
 
     private var wakeLock: PowerManager.WakeLock? = null
+    private var accessToken: String? = null
 
     companion object {
         private const val REDIRECT_URI = "mica-music://callback"
         private const val TAG = "SpotifyService"
+        const val REQUEST_CODE_AUTH = 1337
+        
+        // Scopes needed for App Remote
+        private val SCOPES = arrayOf(
+            "app-remote-control",
+            "user-modify-playback-state",
+            "user-read-playback-state"
+        )
     }
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
@@ -32,9 +45,72 @@ class SpotifyService(private val context: Context) {
         fun onDisconnected()
     }
 
+    interface SpotifyAuthListener {
+        fun onAuthSuccess(accessToken: String)
+        fun onAuthError(error: String)
+        fun onAuthCancelled()
+    }
+
     interface PlaybackListener {
         fun onTrackChanged(track: Track)
         fun onPlaybackStateChanged(isPaused: Boolean, position: Long, duration: Long)
+    }
+
+    /**
+     * Inicia el flujo de autenticación OAuth de Spotify
+     * Debe ser llamado desde una Activity
+     */
+    fun startAuth(activity: android.app.Activity, listener: SpotifyAuthListener) {
+        try {
+            val builder = AuthorizationRequest.Builder(
+                BuildConfig.SPOTIFY_CLIENT_ID,
+                AuthorizationResponse.Type.TOKEN,
+                REDIRECT_URI
+            )
+
+            builder.setScopes(SCOPES)
+            val request = builder.build()
+
+            AuthorizationClient.openLoginActivity(activity, REQUEST_CODE_AUTH, request)
+            
+            Log.d(TAG, "Auth flow started")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error starting auth flow", e)
+            listener.onAuthError("Error iniciando autenticación: ${e.message}")
+        }
+    }
+
+    /**
+     * Procesa el resultado de la autenticación OAuth
+     * Debe ser llamado desde onActivityResult de la Activity
+     */
+    fun handleAuthResponse(requestCode: Int, resultCode: Int, intent: android.content.Intent?, listener: SpotifyAuthListener) {
+        if (requestCode == REQUEST_CODE_AUTH) {
+            val response = AuthorizationClient.getResponse(resultCode, intent)
+            
+            when (response.type) {
+                AuthorizationResponse.Type.TOKEN -> {
+                    accessToken = response.accessToken
+                    Log.d(TAG, "Auth successful, token received")
+                    listener.onAuthSuccess(response.accessToken)
+                }
+                AuthorizationResponse.Type.ERROR -> {
+                    Log.e(TAG, "Auth error: ${response.error}")
+                    listener.onAuthError("Error de autenticación: ${response.error}")
+                }
+                else -> {
+                    Log.d(TAG, "Auth cancelled")
+                    listener.onAuthCancelled()
+                }
+            }
+        }
+    }
+
+    /**
+     * Verifica si tenemos un token de acceso válido
+     */
+    fun isAuthenticated(): Boolean {
+        return !accessToken.isNullOrEmpty()
     }
 
     fun connect(listener: SpotifyConnectionListener) {
@@ -43,17 +119,25 @@ class SpotifyService(private val context: Context) {
             listener.onConnected()
             return
         }
+        
+        // Verificar que estemos autenticados antes de conectar
+        if (!isAuthenticated()) {
+            Log.e(TAG, "Not authenticated. Cannot connect to App Remote without valid token.")
+            listener.onConnectionFailed(Exception("Usuario no autenticado. Debe completar el flujo de autenticación primero."))
+            return
+        }
+        
         try {
             val connectionParams = ConnectionParams.Builder(BuildConfig.SPOTIFY_CLIENT_ID)
                 .setRedirectUri(REDIRECT_URI)
-                .showAuthView(true)
+                .showAuthView(false) // Ya estamos autenticados, no necesitamos mostrar auth view
                 .build()
 
             SpotifyAppRemote.connect(context, connectionParams, object : Connector.ConnectionListener {
                 override fun onConnected(appRemote: SpotifyAppRemote) {
                     try {
                         spotifyAppRemote = appRemote
-                        Log.d(TAG, "Connected to Spotify")
+                        Log.d(TAG, "Connected to Spotify App Remote")
                         listener.onConnected()
                     } catch (e: Exception) {
                         Log.e(TAG, "Error in onConnected callback", e)
@@ -62,7 +146,7 @@ class SpotifyService(private val context: Context) {
                 }
 
                 override fun onFailure(error: Throwable) {
-                    Log.e(TAG, "Failed to connect to Spotify", error)
+                    Log.e(TAG, "Failed to connect to Spotify App Remote", error)
                     listener.onConnectionFailed(error)
                 }
             })
