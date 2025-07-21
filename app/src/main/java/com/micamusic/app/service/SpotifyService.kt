@@ -3,6 +3,7 @@ package com.micamusic.app.service
 import android.content.Context
 import android.util.Log
 import android.os.PowerManager
+import com.micamusic.app.BuildConfig
 
 // Note: This is a simplified version. In production, uncomment the Spotify imports
 // and download the Spotify App Remote SDK from developer.spotify.com
@@ -18,7 +19,6 @@ class SpotifyService(private val context: Context) {
     private var wakeLock: PowerManager.WakeLock? = null
 
     companion object {
-        private const val CLIENT_ID = "4f8d66a264394395ad08998058dd6bdd" // This will be replaced with actual client ID
         private const val REDIRECT_URI = "mica-music://callback"
         private const val TAG = "SpotifyService"
     }
@@ -39,7 +39,7 @@ class SpotifyService(private val context: Context) {
 
     fun connect(listener: SpotifyConnectionListener) {
         try {
-            val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+            val connectionParams = ConnectionParams.Builder(BuildConfig.SPOTIFY_CLIENT_ID)
                 .setRedirectUri(REDIRECT_URI)
                 .showAuthView(true)
                 .build()

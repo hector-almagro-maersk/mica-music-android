@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+
 android {
     namespace = 'com.micamusic.app'
     compileSdk = 34
@@ -17,6 +23,10 @@ android {
             redirectSchemeName: "mica-music",
             redirectHostName: "callback"
         ]
+        
+        // Add Spotify credentials to BuildConfig
+        buildConfigField "String", "SPOTIFY_CLIENT_ID", "\"${localProperties.getProperty('SPOTIFY_CLIENT_ID', '')}\""
+        buildConfigField "String", "SPOTIFY_CLIENT_SECRET", "\"${localProperties.getProperty('SPOTIFY_CLIENT_SECRET', '')}\""
     }
 
     buildTypes {
@@ -34,6 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
