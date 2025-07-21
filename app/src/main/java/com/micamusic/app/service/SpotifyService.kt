@@ -38,6 +38,11 @@ class SpotifyService(private val context: Context) {
     }
 
     fun connect(listener: SpotifyConnectionListener) {
+        if (BuildConfig.SIMULATE_SPOTIFY_SUCCESS) {
+            // Simula éxito inmediato
+            listener.onConnected()
+            return
+        }
         try {
             val connectionParams = ConnectionParams.Builder(BuildConfig.SPOTIFY_CLIENT_ID)
                 .setRedirectUri(REDIRECT_URI)

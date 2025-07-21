@@ -4,7 +4,7 @@
     "imageUrl": "https://congresosjaca.es/wp-content/uploads/2025/01/VAIANA.jpg",
     "artists": [
       {
-        "imageUrl": "https://static.wikia.nocookie.net/disney/images/6/6f/Profile_-_Maui.jpeg/revision/latest/scale-to-width-down/1200?cb=20250309150414",
+        "imageUrl": "https://i.ytimg.com/vi/Grofyj1_tUI/maxresdefault.jpg",
         "spanish": {
           "title": "Que hay mas alla",
           "spotifyUri": "spotify:track:6orRFPOpyksp2Hgh7KDehQ"
@@ -35,6 +35,28 @@
           "title": "We know the way",
           "spotifyUri": "spotify:track:5ndV6rlU0LqeJT7PWEYAV1"
         }
+      },
+      {
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEQChJMuhS4f9Et6vJbwyERND83Zuc-FoB4Q&s",
+        "spanish": {
+          "title": "Al final",
+          "spotifyUri": "spotify:track:3BUTCdvbLrG7b56lqoJAYw"
+        },
+        "english": {
+          "title": "Beyond",
+          "spotifyUri": "spotify:track:3drPZmMQUQrIxgXYHfL2Sm"
+        }
+      },
+      {
+        "imageUrl": "https://i.ytimg.com/vi/ruXVN0g0b7E/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDIE4X6JxcSvpg9ppiVdHu-PQHZlw",
+        "spanish": {
+          "title": "No existe nada mejor",
+          "spotifyUri": "spotify:track:4Q33QdVqXsiOpHIcilLYFe"
+        },
+        "english": {
+          "title": "What could be better than this?",
+          "spotifyUri": "spotify:track:1yRsuQUjZtma6KlOpwynQe"
+        }
       }
     ]
   },
@@ -62,6 +84,67 @@
         "english": {
           "title": "For the First Time in Forever",
           "spotifyUri": "spotify:track:1SCw7GSw06Fpk5vQilILui"
+        }
+      },
+      {
+        "imageUrl": "https://static.wikia.nocookie.net/disney/images/5/53/Profile_-_Olaf.jpeg/revision/latest?cb=20200221075027",
+        "spanish": {
+          "title": "Hazme un muñeco de nieve",
+          "spotifyUri": "spotify:track:5wbIQ0jsmwMwonkHv7TNto"
+        },
+        "english": {
+          "title": "Do You Want to Build a Snowman?",
+          "spotifyUri": "spotify:track:2yi7HZrBOC4bMUSTcs4VK6"
+        }
+      },
+      {
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrnIXKn9G-vzNsqhLyd-BgGFP993nkC1_pw&s",
+        "spanish": {
+          "title": "Mucho mas allá",
+          "spotifyUri": "spotify:track:3nr7KB3jC0LOeYyp8mirdd"
+        },
+        "english": {
+          "title": "Into the Unknown",
+          "spotifyUri": "spotify:track:3Z0oQ8r78OUaHvGPiDBR3W"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Mulan",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV_LZKan_MuViDKTc4CcIQlL4OT0IzPf6X3Q&s",
+    "artists": [
+      {
+        "imageUrl": "https://i1.sndcdn.com/artworks-H98pnSc7mpZyGPfQ-9aNElA-t500x500.jpg",
+        "spanish": {
+          "title": "Reflejo",
+          "spotifyUri": "spotify:track:1Ws6vuNbZy4lSth0VOnEBf"
+        },
+        "english": {
+          "title": "Reflection",
+          "spotifyUri": "spotify:track:2AILbz83cBnrAMAG06rZts"
+        }
+      },
+      {
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdC_fGMonB60bWR_hiqrUy77hpbM3mCuX-QQ&s",
+        "spanish": {
+          "title": "Voy a hacer todo un hombre de ti",
+          "spotifyUri": "spotify:track:3wwnCL9mlH3BaVEMm9wTiF"
+        },
+        "english": {
+          "title": "I'll Make a Man Out of You",
+          "spotifyUri": "spotify:track:28UMEtwyUUy5u0UWOVHwiI"
+        }
+      },
+      {
+        "imageUrl": "https://static.wikia.nocookie.net/disney/images/d/dd/A_Girl_Worth_Fighting_For.png/revision/latest?cb=20150705195525",
+        "spanish": {
+          "title": "Mi dulce y linda flor",
+          "spotifyUri": "spotify:track:4XyRtKxuR36GAY8BAi1q1q"
+        },
+        "english": {
+          "title": "A girl worth fighting for",
+          "spotifyUri": "spotify:track:3wjgPeXocinhLyPL37p70e"
         }
       }
     ]
