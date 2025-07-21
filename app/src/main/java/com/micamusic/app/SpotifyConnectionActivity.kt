@@ -9,15 +9,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.micamusic.app.service.SpotifyService
 
-class SpotifyConnectionActivity : AppCompatActivity(), 
-    SpotifyService.SpotifyAuthListener, 
-    SpotifyService.SpotifyConnectionListener {
+class SpotifyConnectionActivity : AppCompatActivity() {
 
     private lateinit var spotifyService: SpotifyService
     private lateinit var progressBar: ProgressBar
     private lateinit var statusText: TextView
     private lateinit var retryButton: Button
-    private var isAuthenticating = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +22,7 @@ class SpotifyConnectionActivity : AppCompatActivity(),
 
         initViews()
         initSpotifyService()
-        startSpotifyAuth()
+        connectToSpotify()
     }
 
     private fun initViews() {
@@ -34,7 +31,7 @@ class SpotifyConnectionActivity : AppCompatActivity(),
         retryButton = findViewById(R.id.retryButton)
 
         retryButton.setOnClickListener {
-            startSpotifyAuth()
+            connectToSpotify()
         }
     }
 
@@ -42,79 +39,31 @@ class SpotifyConnectionActivity : AppCompatActivity(),
         spotifyService = SpotifyService(this)
     }
 
-    private fun startSpotifyAuth() {
-        if (spotifyService.isAuthenticated()) {
-            // Ya estamos autenticados, conectar directamente
-            connectToSpotify()
-        } else {
-            // Necesitamos autenticarnos primero
-            showAuthenticating()
-            isAuthenticating = true
-            spotifyService.startAuth(this, this)
-        }
-    }
-
     private fun connectToSpotify() {
         showConnecting()
-        isAuthenticating = false
         
-        spotifyService.connect(this)
-    }
+        spotifyService.connect(object : SpotifyService.SpotifyConnectionListener {
+            override fun onConnected() {
+                runOnUiThread {
+                    // Conexión exitosa, ir a MainActivity
+                    val intent = Intent(this@SpotifyConnectionActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
 
-    // Implementación de SpotifyAuthListener
-    override fun onAuthSuccess(accessToken: String) {
-        runOnUiThread {
-            // Autenticación exitosa, ahora conectar con App Remote
-            connectToSpotify()
-        }
-    }
+            override fun onConnectionFailed(error: Throwable) {
+                runOnUiThread {
+                    showError()
+                }
+            }
 
-    override fun onAuthError(error: String) {
-        runOnUiThread {
-            showError("Error de autenticación: $error")
-        }
-    }
-
-    override fun onAuthCancelled() {
-        runOnUiThread {
-            showError("Autenticación cancelada")
-        }
-    }
-
-    // Implementación de SpotifyConnectionListener
-    override fun onConnected() {
-        runOnUiThread {
-            // Conexión exitosa, ir a MainActivity
-            val intent = Intent(this@SpotifyConnectionActivity, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-
-    override fun onConnectionFailed(error: Throwable) {
-        runOnUiThread {
-            showError("Error conectando a Spotify: ${error.message}")
-        }
-    }
-
-    override fun onDisconnected() {
-        runOnUiThread {
-            showError("Desconectado de Spotify")
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        
-        if (isAuthenticating) {
-            spotifyService.handleAuthResponse(requestCode, resultCode, data, this)
-        }
-    }
-
-    private fun showAuthenticating() {
-        progressBar.visibility = View.VISIBLE
-        statusText.text = "Autenticando con Spotify..."
-        retryButton.visibility = View.GONE
+            override fun onDisconnected() {
+                runOnUiThread {
+                    showError()
+                }
+            }
+        })
     }
 
     private fun showConnecting() {
@@ -123,9 +72,9 @@ class SpotifyConnectionActivity : AppCompatActivity(),
         retryButton.visibility = View.GONE
     }
 
-    private fun showError(message: String = "Error conectando a Spotify") {
+    private fun showError() {
         progressBar.visibility = View.GONE
-        statusText.text = message
+        statusText.text = "Error conectando a Spotify"
         retryButton.visibility = View.VISIBLE
     }
 
