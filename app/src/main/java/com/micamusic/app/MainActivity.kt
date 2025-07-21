@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
     private var isUserSeeking = false
     private var currentPosition: Long = 0
     private var currentDuration: Long = 0
+    private var lastUpdateTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,6 +108,8 @@ class MainActivity : AppCompatActivity() {
                 isUserSeeking = false
                 if (isSpotifyConnected && spotifyService.isConnected()) {
                     val seekPosition = (seekBar!!.progress.toLong() * currentDuration) / 100
+                    currentPosition = seekPosition // Update our tracked position
+                    lastUpdateTime = System.currentTimeMillis() // Reset time tracker
                     spotifyService.seekTo(seekPosition)
                 }
             }
@@ -177,6 +180,7 @@ class MainActivity : AppCompatActivity() {
                     
                     currentPosition = position
                     currentDuration = duration
+                    lastUpdateTime = System.currentTimeMillis() // Reset time tracker
                     
                     updateSeekBar()
                     updateTimeLabels()
@@ -230,10 +234,13 @@ class MainActivity : AppCompatActivity() {
             spotifyService.pause()
             playPauseButton.text = "▶️"
             isPlaying = false
+            seekBarUpdateHandler.removeCallbacksAndMessages(null)
         } else {
             spotifyService.resume()
             playPauseButton.text = "⏸️"
             isPlaying = true
+            lastUpdateTime = System.currentTimeMillis()
+            startSeekBarUpdates()
         }
     }
     
@@ -271,18 +278,39 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         // Reanudar las actualizaciones si hay una canción reproduciéndose
         if (isPlaying && currentDuration > 0) {
+            lastUpdateTime = System.currentTimeMillis()
             startSeekBarUpdates()
         }
     }
 
     private fun startSeekBarUpdates() {
+        // Primero detener cualquier actualización anterior
+        seekBarUpdateHandler.removeCallbacksAndMessages(null)
+        
+        lastUpdateTime = System.currentTimeMillis()
         seekBarUpdateHandler.post(object : Runnable {
             override fun run() {
                 if (isPlaying && !isUserSeeking) {
+                    // Incrementar la posición actual basándose en el tiempo transcurrido
+                    val currentTime = System.currentTimeMillis()
+                    val elapsed = currentTime - lastUpdateTime
+                    lastUpdateTime = currentTime
+                    
+                    if (elapsed > 0) {
+                        currentPosition += elapsed
+                        // Asegurar que no excedamos la duración total
+                        if (currentPosition > currentDuration) {
+                            currentPosition = currentDuration
+                        }
+                    }
+                    
                     updateSeekBar()
                     updateTimeLabels()
                 }
-                seekBarUpdateHandler.postDelayed(this, 1000) // Actualizar cada segundo
+                
+                if (isPlaying) {
+                    seekBarUpdateHandler.postDelayed(this, 500) // Actualizar cada 500ms para más fluidez
+                }
             }
         })
     }
