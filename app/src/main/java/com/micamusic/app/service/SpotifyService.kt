@@ -5,23 +5,23 @@ import android.util.Log
 
 // Note: This is a simplified version. In production, uncomment the Spotify imports
 // and download the Spotify App Remote SDK from developer.spotify.com
-// import com.spotify.android.appremote.api.ConnectionParams
-// import com.spotify.android.appremote.api.Connector
-// import com.spotify.android.appremote.api.SpotifyAppRemote
-// import com.spotify.protocol.client.Subscription
-// import com.spotify.protocol.types.PlayerState
-// import com.spotify.protocol.types.Track
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.client.Subscription
+import com.spotify.protocol.types.PlayerState
+import com.spotify.protocol.types.Track
 
 class SpotifyService(private val context: Context) {
 
     companion object {
-        private const val CLIENT_ID = "your_client_id_here" // This will be replaced with actual client ID
+        private const val CLIENT_ID = "4f8d66a264394395ad08998058dd6bdd" // This will be replaced with actual client ID
         private const val REDIRECT_URI = "mica-music://callback"
         private const val TAG = "SpotifyService"
     }
 
-    // private var spotifyAppRemote: SpotifyAppRemote? = null
-    // private var playerStateSubscription: Subscription<PlayerState>? = null
+    private var spotifyAppRemote: SpotifyAppRemote? = null
+    private var playerStateSubscription: Subscription<PlayerState>? = null
 
     interface SpotifyConnectionListener {
         fun onConnected()
@@ -35,13 +35,6 @@ class SpotifyService(private val context: Context) {
     }
 
     fun connect(listener: SpotifyConnectionListener) {
-        // Simplified implementation - in production, use actual Spotify SDK
-        Log.d(TAG, "Simulating Spotify connection...")
-        
-        // Simulate successful connection for demonstration
-        listener.onConnected()
-        
-        /* Production code (uncomment when Spotify SDK is available):
         val connectionParams = ConnectionParams.Builder(CLIENT_ID)
             .setRedirectUri(REDIRECT_URI)
             .showAuthView(true)
@@ -59,26 +52,21 @@ class SpotifyService(private val context: Context) {
                 listener.onConnectionFailed(error)
             }
         })
-        */
     }
 
     fun disconnect() {
-        // playerStateSubscription?.cancel()
-        // spotifyAppRemote?.let {
-        //     SpotifyAppRemote.disconnect(it)
-        //     spotifyAppRemote = null
-        // }
+        playerStateSubscription?.cancel()
+        spotifyAppRemote?.let {
+            SpotifyAppRemote.disconnect(it)
+            spotifyAppRemote = null
+        }
         Log.d(TAG, "Disconnected from Spotify")
     }
 
     fun playTrack(trackUri: String, playbackListener: PlaybackListener? = null) {
-        // Simplified implementation - in production, use actual Spotify SDK
-        Log.d(TAG, "Simulating play track: $trackUri")
-        
-        /* Production code (uncomment when Spotify SDK is available):
         spotifyAppRemote?.let { remote ->
             remote.playerApi.play(trackUri)
-                .setResultCallback { 
+                .setResultCallback {
                     Log.d(TAG, "Playing track: $trackUri")
                 }
                 .setErrorCallback { error ->
@@ -97,21 +85,19 @@ class SpotifyService(private val context: Context) {
         } ?: run {
             Log.e(TAG, "SpotifyAppRemote is not connected")
         }
-        */
     }
 
     fun pause() {
-        // spotifyAppRemote?.playerApi?.pause()
+        spotifyAppRemote?.playerApi?.pause()
         Log.d(TAG, "Pausing playback")
     }
 
     fun resume() {
-        // spotifyAppRemote?.playerApi?.resume()
+        spotifyAppRemote?.playerApi?.resume()
         Log.d(TAG, "Resuming playback")
     }
 
     fun isConnected(): Boolean {
-        // return spotifyAppRemote != null
-        return true // Simulate always connected for demo
+        return spotifyAppRemote != null
     }
 }
