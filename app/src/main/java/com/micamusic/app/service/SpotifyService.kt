@@ -2,6 +2,7 @@ package com.micamusic.app.service
 
 import android.content.Context
 import android.util.Log
+import android.os.PowerManager
 
 // Note: This is a simplified version. In production, uncomment the Spotify imports
 // and download the Spotify App Remote SDK from developer.spotify.com
@@ -13,6 +14,8 @@ import com.spotify.protocol.types.PlayerState
 import com.spotify.protocol.types.Track
 
 class SpotifyService(private val context: Context) {
+
+    private var wakeLock: PowerManager.WakeLock? = null
 
     companion object {
         private const val CLIENT_ID = "4f8d66a264394395ad08998058dd6bdd" // This will be replaced with actual client ID
@@ -71,6 +74,7 @@ class SpotifyService(private val context: Context) {
                 SpotifyAppRemote.disconnect(it)
                 spotifyAppRemote = null
             }
+            releaseWakeLock()
             Log.d(TAG, "Disconnected from Spotify")
         } catch (e: Exception) {
             Log.e(TAG, "Error disconnecting from Spotify", e)
@@ -92,6 +96,7 @@ class SpotifyService(private val context: Context) {
                 remote.playerApi.play(trackUri)
                     .setResultCallback {
                         Log.d(TAG, "Playing track: $trackUri")
+                        acquireWakeLock()
                     }
                     .setErrorCallback { error ->
                         Log.e(TAG, "Failed to play track: $trackUri", error)
@@ -131,12 +136,32 @@ class SpotifyService(private val context: Context) {
             spotifyAppRemote?.playerApi?.pause()
                 ?.setResultCallback {
                     Log.d(TAG, "Pausing playback")
+                    releaseWakeLock()
                 }
                 ?.setErrorCallback { error ->
                     Log.e(TAG, "Failed to pause playback", error)
                 }
         } catch (e: Exception) {
             Log.e(TAG, "Exception in pause", e)
+        }
+    }
+
+    private fun acquireWakeLock() {
+        if (wakeLock == null) {
+            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "mica-music:MusicWakeLock")
+            wakeLock?.setReferenceCounted(false)
+        }
+        if (wakeLock?.isHeld == false) {
+            wakeLock?.acquire()
+            Log.d(TAG, "WakeLock acquired")
+        }
+    }
+
+    private fun releaseWakeLock() {
+        if (wakeLock?.isHeld == true) {
+            wakeLock?.release()
+            Log.d(TAG, "WakeLock released")
         }
     }
 
