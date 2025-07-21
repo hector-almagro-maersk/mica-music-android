@@ -67,13 +67,53 @@ class GroupAdapter(
                 adapter = artistAdapter
             }
 
-            songsRecyclerView.visibility = if (group.isExpanded) View.VISIBLE else View.GONE
-            groupExpandIcon.rotation = if (group.isExpanded) 180f else 0f
+            // Animación de expansión/colapso
+            if (group.isExpanded && songsRecyclerView.visibility != View.VISIBLE) {
+                expandView(songsRecyclerView)
+            } else if (!group.isExpanded && songsRecyclerView.visibility != View.GONE) {
+                collapseView(songsRecyclerView)
+            }
+
+            // Animar el icono de expansión
+            groupExpandIcon.animate().rotation(if (group.isExpanded) 180f else 0f).setDuration(250).start()
 
             groupHeader.setOnClickListener {
                 group.isExpanded = !group.isExpanded
                 notifyItemChanged(adapterPosition)
             }
+        }
+
+        // Métodos utilitarios para animar expansión/colapso
+        private fun expandView(view: View) {
+            view.measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.UNSPECIFIED)
+            val targetHeight = view.measuredHeight
+            view.layoutParams.height = 0
+            view.visibility = View.VISIBLE
+            val animator = android.animation.ValueAnimator.ofInt(0, targetHeight)
+            animator.addUpdateListener { valueAnimator ->
+                view.layoutParams.height = valueAnimator.animatedValue as Int
+                view.requestLayout()
+            }
+            animator.duration = 250
+            animator.start()
+        }
+
+        private fun collapseView(view: View) {
+            val initialHeight = view.measuredHeight
+            val animator = android.animation.ValueAnimator.ofInt(initialHeight, 0)
+            animator.addUpdateListener { valueAnimator ->
+                view.layoutParams.height = valueAnimator.animatedValue as Int
+                view.requestLayout()
+            }
+            animator.duration = 250
+            animator.start()
+            animator.addListener(object : android.animation.AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: android.animation.Animator) {
+                    view.visibility = View.GONE
+                    view.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                }
+            })
         }
     }
 }
