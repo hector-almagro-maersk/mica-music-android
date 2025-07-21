@@ -12,9 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.micamusic.app.adapter.ArtistAdapter
+import com.micamusic.app.adapter.GroupAdapter
 import com.micamusic.app.model.Artist
 import com.micamusic.app.model.Song
+import com.micamusic.app.model.SongGroup
 import com.micamusic.app.service.DataService
 import com.micamusic.app.service.SpotifyService
 import com.spotify.protocol.types.Track
@@ -22,7 +23,7 @@ import com.spotify.protocol.types.Track
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var artistAdapter: ArtistAdapter
+    private lateinit var groupAdapter: GroupAdapter
     private lateinit var spotifyService: SpotifyService
     private lateinit var dataService: DataService
     
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentTime: TextView
     private lateinit var totalTime: TextView
     
-    private var artists: List<Artist> = emptyList()
+    private var songGroups: List<SongGroup> = emptyList()
     private var isPlaying = false
     private var currentSong: Song? = null
     private var currentArtist: Artist? = null
@@ -76,14 +77,14 @@ class MainActivity : AppCompatActivity() {
         currentTime = findViewById(R.id.currentTime)
         totalTime = findViewById(R.id.totalTime)
         
-        artistAdapter = ArtistAdapter(
-            artists = artists,
+        groupAdapter = GroupAdapter(
+            groups = songGroups,
             onSongClick = { artist, song, language -> playSong(artist, song, language) }
         )
         
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = artistAdapter
+            adapter = groupAdapter
         }
 
         // Set up play/pause button
@@ -117,8 +118,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        artists = dataService.loadArtists()
-        artistAdapter.updateArtists(artists)
+        songGroups = dataService.loadSongGroups()
+        groupAdapter.updateGroups(songGroups)
     }
 
     private fun setupSpotifyPlaybackListener() {
@@ -163,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         updatePlayerControl()
         
         // Update adapter to show visual effects
-        artistAdapter.updateCurrentPlaying(artist, song, language)
+        groupAdapter.setCurrentPlaying(artist, song, language)
         
         // Play the song with playback listener
         spotifyService.playTrack(song.spotifyUri, object : SpotifyService.PlaybackListener {
