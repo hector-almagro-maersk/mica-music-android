@@ -40,11 +40,11 @@ class ArtistAdapter(
         notifyDataSetChanged()
     }
     
-    fun updateCurrentPlaying(artist: Artist?, song: Song?, language: String?) {
+    fun setCurrentPlaying(artist: Artist?, song: Song?, language: String?) {
         currentPlayingArtist = artist
         currentPlayingSong = song
         currentPlayingLanguage = language
-        notifyDataSetChanged() // Actualizar toda la lista para mostrar/quitar efectos
+        notifyDataSetChanged()
     }
 
     inner class ArtistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
