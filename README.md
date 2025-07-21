@@ -1,27 +1,41 @@
 # 🎵 Mica Music - Spotify Local Playlist App
 
-A mobile Android application that connects to the Spotify Web API and plays songs from a local list of artists. Users can toggle between Spanish and English playback using a sticky footer with language flags.
+A mobile Android application that connects to the Spotify Web API and plays songs from a local list of artists. Users can select between Spanish and English songs using a modern three-column interface with individual language controls.
 
-## 🚀 Features
+## ✨ Features
 
-- **Multi-language Support**: Toggle between Spanish and English songs using flag buttons
-- **Spotify Integration**: Seamless connection to Spotify Web API for music playback
-- **Smart UI**: Songs unavailable in the selected language appear in grayscale and are disabled
-- **Local Data**: Uses a local JSON file containing artist information and song URIs
-- **Responsive Design**: Scrollable list with beautiful card-based artist display
-- **Automated Deployment**: CI/CD pipeline builds and deploys APK via GitHub Actions
+- **Spotify Integration**: Stream music directly through the Spotify app
+- **Multi-language Support**: Toggle between Spanish and English songs with dedicated columns for each language
+- **Smart UI**: Songs unavailable in a language appear in grayscale and are disabled
+- **Modern Interface**: Three-column layout with artist image, Spanish songs, and English songs
+- **Player Control**: Global play/pause control showing current song information
 
-## 📦 Local Data Structure
+## � Data Structure
 
 The app reads from a local JSON file (`app/src/main/assets/artists.json`) with this format:
 
 ```json
 [
   {
-    "name": "Shakira",
+    "name": "Frozen",
     "imageUrl": "https://i.scdn.co/image/ab6761610000e5ebcc9dc00cad9092fdb3b137a0",
-    "spanishSong": "spotify:track:3sNVsP50132BTNlImLx70i",
-    "englishSong": "spotify:track:2dLLR6qlu5UJ5gk0dKz0h3"
+    "spanish": {
+      "title": "¡Suéltalo!",
+      "spotifyUri": "spotify:track:59g9tRMoYFB0eVeqamx3Pp"
+    },
+    "english": {
+      "title": "Let It Go",
+      "spotifyUri": "spotify:track:600HVBpzF1WfBdaRwbEvLz"
+    }
+  },
+  {
+    "name": "Jesse & Joy",
+    "imageUrl": "https://i.scdn.co/image/ab6761610000e5eba28a9ccb3bfe1c8e46fa8a7f",
+    "spanish": {
+      "title": "¡Corre!",
+      "spotifyUri": "spotify:track:4f9iBdXUYyNaK4sSLbhpSJ"
+    },
+    "english": null
   }
 ]
 ```

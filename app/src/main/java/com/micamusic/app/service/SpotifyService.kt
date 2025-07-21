@@ -30,57 +30,96 @@ class SpotifyService(private val context: Context) {
     }
 
     interface PlaybackListener {
-        fun onTrackChanged(track: Any) // Using Any instead of Track for now
-        fun onPlaybackStateChanged(isPaused: Boolean)
+        fun onTrackChanged(track: Track)
+        fun onPlaybackStateChanged(isPaused: Boolean, position: Long, duration: Long)
     }
 
     fun connect(listener: SpotifyConnectionListener) {
-        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
-            .setRedirectUri(REDIRECT_URI)
-            .showAuthView(true)
-            .build()
+        try {
+            val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+                .setRedirectUri(REDIRECT_URI)
+                .showAuthView(true)
+                .build()
 
-        SpotifyAppRemote.connect(context, connectionParams, object : Connector.ConnectionListener {
-            override fun onConnected(appRemote: SpotifyAppRemote) {
-                spotifyAppRemote = appRemote
-                Log.d(TAG, "Connected to Spotify")
-                listener.onConnected()
-            }
+            SpotifyAppRemote.connect(context, connectionParams, object : Connector.ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    try {
+                        spotifyAppRemote = appRemote
+                        Log.d(TAG, "Connected to Spotify")
+                        listener.onConnected()
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error in onConnected callback", e)
+                        listener.onConnectionFailed(e)
+                    }
+                }
 
-            override fun onFailure(error: Throwable) {
-                Log.e(TAG, "Failed to connect to Spotify", error)
-                listener.onConnectionFailed(error)
-            }
-        })
+                override fun onFailure(error: Throwable) {
+                    Log.e(TAG, "Failed to connect to Spotify", error)
+                    listener.onConnectionFailed(error)
+                }
+            })
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception in connect", e)
+            listener.onConnectionFailed(e)
+        }
     }
 
     fun disconnect() {
-        playerStateSubscription?.cancel()
-        spotifyAppRemote?.let {
-            SpotifyAppRemote.disconnect(it)
-            spotifyAppRemote = null
+        try {
+            playerStateSubscription?.cancel()
+            spotifyAppRemote?.let {
+                SpotifyAppRemote.disconnect(it)
+                spotifyAppRemote = null
+            }
+            Log.d(TAG, "Disconnected from Spotify")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error disconnecting from Spotify", e)
         }
-        Log.d(TAG, "Disconnected from Spotify")
     }
 
     fun playTrack(trackUri: String, playbackListener: PlaybackListener? = null) {
         spotifyAppRemote?.let { remote ->
-            remote.playerApi.play(trackUri)
-                .setResultCallback {
-                    Log.d(TAG, "Playing track: $trackUri")
-                }
-                .setErrorCallback { error ->
-                    Log.e(TAG, "Failed to play track: $trackUri", error)
-                }
-
-            // Subscribe to player state changes if listener provided
-            playbackListener?.let { listener ->
-                playerStateSubscription?.cancel()
-                playerStateSubscription = remote.playerApi.subscribeToPlayerState()
-                    .setEventCallback { playerState ->
-                        listener.onTrackChanged(playerState.track)
-                        listener.onPlaybackStateChanged(playerState.isPaused)
+            try {
+                // Set repeat mode to ONE (repeat current song)
+                remote.playerApi.setRepeat(1) // 1 = Repeat.ONE
+                    .setResultCallback {
+                        Log.d(TAG, "Repeat mode set to ONE (repeat current track)")
                     }
+                    .setErrorCallback { error ->
+                        Log.e(TAG, "Failed to set repeat mode", error)
+                    }
+
+                remote.playerApi.play(trackUri)
+                    .setResultCallback {
+                        Log.d(TAG, "Playing track: $trackUri")
+                    }
+                    .setErrorCallback { error ->
+                        Log.e(TAG, "Failed to play track: $trackUri", error)
+                    }
+
+                // Subscribe to player state changes if listener provided
+                playbackListener?.let { listener ->
+                    playerStateSubscription?.cancel()
+                    
+                    remote.playerApi.subscribeToPlayerState()
+                        .setEventCallback { playerState ->
+                            try {
+                                listener.onTrackChanged(playerState.track)
+                                listener.onPlaybackStateChanged(
+                                    playerState.isPaused,
+                                    playerState.playbackPosition,
+                                    playerState.track.duration
+                                )
+                            } catch (e: Exception) {
+                                Log.e(TAG, "Error in playback listener", e)
+                            }
+                        }
+                        .setErrorCallback { error ->
+                            Log.e(TAG, "Error subscribing to player state", error)
+                        }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception in playTrack", e)
             }
         } ?: run {
             Log.e(TAG, "SpotifyAppRemote is not connected")
@@ -88,13 +127,62 @@ class SpotifyService(private val context: Context) {
     }
 
     fun pause() {
-        spotifyAppRemote?.playerApi?.pause()
-        Log.d(TAG, "Pausing playback")
+        try {
+            spotifyAppRemote?.playerApi?.pause()
+                ?.setResultCallback {
+                    Log.d(TAG, "Pausing playback")
+                }
+                ?.setErrorCallback { error ->
+                    Log.e(TAG, "Failed to pause playback", error)
+                }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception in pause", e)
+        }
     }
 
     fun resume() {
-        spotifyAppRemote?.playerApi?.resume()
-        Log.d(TAG, "Resuming playback")
+        try {
+            spotifyAppRemote?.playerApi?.resume()
+                ?.setResultCallback {
+                    Log.d(TAG, "Resuming playback")
+                }
+                ?.setErrorCallback { error ->
+                    Log.e(TAG, "Failed to resume playback", error)
+                }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception in resume", e)
+        }
+    }
+
+    fun seekTo(positionMs: Long) {
+        try {
+            spotifyAppRemote?.playerApi?.seekTo(positionMs)
+                ?.setResultCallback {
+                    Log.d(TAG, "Seeking to position: $positionMs")
+                }
+                ?.setErrorCallback { error ->
+                    Log.e(TAG, "Failed to seek to position: $positionMs", error)
+                }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception in seekTo", e)
+        }
+    }
+
+    fun setRepeatMode(repeatMode: Int) {
+        // repeatMode: 0 = OFF, 1 = ONE (repeat track), 2 = ALL (repeat context)
+        spotifyAppRemote?.playerApi?.setRepeat(repeatMode)
+            ?.setResultCallback {
+                val mode = when (repeatMode) {
+                    0 -> "OFF"
+                    1 -> "ONE (repeat current track)"
+                    2 -> "ALL (repeat context)"
+                    else -> "UNKNOWN"
+                }
+                Log.d(TAG, "Repeat mode set to: $mode")
+            }
+            ?.setErrorCallback { error ->
+                Log.e(TAG, "Failed to set repeat mode to: $repeatMode", error)
+            }
     }
 
     fun isConnected(): Boolean {

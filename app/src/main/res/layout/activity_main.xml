@@ -4,60 +4,148 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/sand_background"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintBottom_toTopOf="@+id/languageFooter"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/playerControl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_artist" />
 
+    <!-- Control de reproducción -->
     <LinearLayout
-        android:id="@+id/languageFooter"
+        android:id="@+id/playerControl"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="@color/purple_500"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_height="120dp"
+        android:background="@drawable/ocean_gradient"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/spanishFlag"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="@string/spanish_flag"
-            android:textSize="36sp"
-            tools:ignore="TouchTargetSizeCheck" />
+        <!-- Información de la canción actual -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            <!-- Imagen del artista -->
+            <ImageView
+                android:id="@+id/currentArtistImage"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="12dp"
+                android:background="@color/gray"
+                android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/englishFlag"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="@string/english_flag"
-            android:textSize="36sp"
-            tools:ignore="TouchTargetSizeCheck" />
+            <!-- Información de texto -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/currentSongTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Let It Go" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="2dp">
+
+
+                    <TextView
+                        android:id="@+id/currentLanguageFlag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="16sp"
+                        tools:text="🇺🇸" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Botón Play/Pause -->
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp">
+
+                <!-- Efecto de brillo para el botón -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ocean_glow_background" />
+
+                <TextView
+                    android:id="@+id/playPauseButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="▶️"
+                    android:textSize="24sp" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- Seek bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/currentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/sand_light"
+                android:textSize="10sp"
+                android:text="0:00" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="8dp"
+                android:progressTint="@color/white"
+                android:thumbTint="@color/white"
+                android:progressBackgroundTint="@color/sand_light" />
+
+            <TextView
+                android:id="@+id/totalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/sand_light"
+                android:textSize="10sp"
+                android:text="0:00" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

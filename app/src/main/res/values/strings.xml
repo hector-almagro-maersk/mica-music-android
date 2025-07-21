@@ -4,7 +4,7 @@
     <string name="english_flag">🇬🇧</string>
     <string name="language_spanish">Spanish</string>
     <string name="language_english">English</string>
-    <string name="song_unavailable">Song not available in this language</string>
+    <string name="song_unavailable">Not available</string>
     <string name="connecting_spotify">Connecting to Spotify...</string>
     <string name="authentication_failed">Spotify authentication failed</string>
 </resources>

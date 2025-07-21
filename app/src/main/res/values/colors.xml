@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Tema Vaiana/Moana -->
+    <!-- Azules del océano -->
+    <color name="ocean_deep">#006994</color>
+    <color name="ocean_blue">#0ea5e9</color>
+    <color name="ocean_light">#7dd3fc</color>
+    <color name="ocean_foam">#a7f3d0</color>
+    
+    <!-- Tonos de arena y tierra -->
+    <color name="sand_light">#fef3c7</color>
+    <color name="sand_medium">#f59e0b</color>
+    <color name="sand_dark">#d97706</color>
+    <color name="earth_brown">#92400e</color>
+    
+    <!-- Acentos tropicales -->
+    <color name="coral_pink">#fb7185</color>
+    <color name="tropical_green">#10b981</color>
+    <color name="sunset_orange">#f97316</color>
+    
+    <!-- Efectos especiales -->
+    <color name="glow_gold">#fbbf24</color>
+    <color name="glow_blue">#60a5fa</color>
+    
+    <!-- Básicos -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#FF808080</color>
+    <color name="gray_light">#FFE5E5E5</color>
+    
+    <!-- Compatibilidad -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#006994</color>
+    <color name="purple_700">#004d6b</color>
+    <color name="teal_200">#a7f3d0</color>
+    <color name="teal_700">#10b981</color>
 </resources>

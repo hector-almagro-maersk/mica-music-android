@@ -5,15 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:background="@drawable/tropical_card_background"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/tropical_card_background"
         android:orientation="horizontal"
         android:padding="16dp">
 
+        <!-- Columna 1: Imagen del artista -->
         <ImageView
             android:id="@+id/artistImage"
             android:layout_width="80dp"
@@ -23,31 +26,105 @@
             android:scaleType="centerCrop"
             tools:src="@mipmap/ic_launcher" />
 
-        <LinearLayout
+        <!-- Columna 2: Canción en español -->
+        <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_height="80dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginEnd="8dp">
 
-            <TextView
-                android:id="@+id/artistName"
+            <!-- Efecto de brillo detrás (inicialmente invisible) -->
+            <View
+                android:id="@+id/spanishGlowEffect"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="Artist Name" />
+                android:layout_height="match_parent"
+                android:background="@drawable/flag_glow_effect"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/songStatus"
+            <LinearLayout
+                android:id="@+id/spanishColumn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                tools:text="Available in Spanish" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:padding="8dp">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/spanishSongTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/earth_brown"
+                    tools:text="¡Suéltalo!" />
+
+                <TextView
+                    android:id="@+id/spanishFlag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="🇪🇸"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- Columna 3: Canción en inglés -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp">
+
+            <!-- Efecto de brillo detrás (inicialmente invisible) -->
+            <View
+                android:id="@+id/englishGlowEffect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/flag_glow_effect"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/englishColumn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/englishSongTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/earth_brown"
+                    tools:text="Let It Go" />
+
+                <TextView
+                    android:id="@+id/englishFlag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="🇺🇸"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 

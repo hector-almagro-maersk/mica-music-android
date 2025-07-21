@@ -1,15 +1,23 @@
 package com.micamusic.app
 
 import android.os.Bundle
-import android.widget.Toast
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.micamusic.app.adapter.ArtistAdapter
 import com.micamusic.app.model.Artist
-import com.micamusic.app.model.Language
+import com.micamusic.app.model.Song
 import com.micamusic.app.service.DataService
 import com.micamusic.app.service.SpotifyService
+import com.spotify.protocol.types.Track
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,8 +26,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var spotifyService: SpotifyService
     private lateinit var dataService: DataService
     
-    private var currentLanguage = Language.SPANISH
+    // Player control views
+    private lateinit var playerControl: LinearLayout
+    private lateinit var currentSongTitle: TextView
+    private lateinit var currentArtistImage: ImageView
+    private lateinit var currentLanguageFlag: TextView
+    private lateinit var playPauseButton: TextView
+    private lateinit var seekBar: SeekBar
+    private lateinit var currentTime: TextView
+    private lateinit var totalTime: TextView
+    
     private var artists: List<Artist> = emptyList()
+    private var isPlaying = false
+    private var currentSong: Song? = null
+    private var currentArtist: Artist? = null
+    private var currentLanguage: String? = null
+    private var isSpotifyConnected = false
+    
+    // Para actualizar la seek bar
+    private val seekBarUpdateHandler = Handler(Looper.getMainLooper())
+    private var isUserSeeking = false
+    private var currentPosition: Long = 0
+    private var currentDuration: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         initServices()
         initUI()
         loadData()
-        connectToSpotify()
+        setupSpotifyPlaybackListener()
     }
 
     private fun initServices() {
@@ -38,11 +66,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUI() {
         recyclerView = findViewById(R.id.recyclerView)
+        playerControl = findViewById(R.id.playerControl)
+        currentSongTitle = findViewById(R.id.currentSongTitle)
+        currentArtistImage = findViewById(R.id.currentArtistImage)
+        currentLanguageFlag = findViewById(R.id.currentLanguageFlag)
+        playPauseButton = findViewById(R.id.playPauseButton)
+        seekBar = findViewById(R.id.seekBar)
+        currentTime = findViewById(R.id.currentTime)
+        totalTime = findViewById(R.id.totalTime)
         
         artistAdapter = ArtistAdapter(
             artists = artists,
-            currentLanguage = currentLanguage,
-            onArtistClick = { artist -> playArtistSong(artist) }
+            onSongClick = { artist, song, language -> playSong(artist, song, language) }
         )
         
         recyclerView.apply {
@@ -50,14 +85,32 @@ class MainActivity : AppCompatActivity() {
             adapter = artistAdapter
         }
 
-        // Set up language toggle buttons
-        findViewById<android.widget.TextView>(R.id.spanishFlag).setOnClickListener {
-            switchLanguage(Language.SPANISH)
+        // Set up play/pause button
+        playPauseButton.setOnClickListener {
+            togglePlayPause()
         }
         
-        findViewById<android.widget.TextView>(R.id.englishFlag).setOnClickListener {
-            switchLanguage(Language.ENGLISH)
-        }
+        // Set up seek bar
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val seekPosition = (progress.toLong() * currentDuration) / 100
+                    currentTime.text = formatTime(seekPosition)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                isUserSeeking = true
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                isUserSeeking = false
+                if (isSpotifyConnected && spotifyService.isConnected()) {
+                    val seekPosition = (seekBar!!.progress.toLong() * currentDuration) / 100
+                    spotifyService.seekTo(seekPosition)
+                }
+            }
+        })
     }
 
     private fun loadData() {
@@ -65,64 +118,172 @@ class MainActivity : AppCompatActivity() {
         artistAdapter.updateArtists(artists)
     }
 
-    private fun connectToSpotify() {
+    private fun setupSpotifyPlaybackListener() {
+        // Conectar a Spotify cuando se inicia la app
         spotifyService.connect(object : SpotifyService.SpotifyConnectionListener {
             override fun onConnected() {
                 runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Connected to Spotify", Toast.LENGTH_SHORT).show()
+                    // Conexión exitosa
+                    isSpotifyConnected = true
+                    // Ya no necesitamos mostrar mensaje de "conectando"
                 }
             }
 
             override fun onConnectionFailed(error: Throwable) {
                 runOnUiThread {
-                    Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.authentication_failed),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    // Manejar error de conexión
+                    isSpotifyConnected = false
+                    // Podrías mostrar un Toast o mensaje de error aquí
                 }
             }
 
             override fun onDisconnected() {
                 runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Disconnected from Spotify", Toast.LENGTH_SHORT).show()
+                    // Spotify se desconectó
+                    isSpotifyConnected = false
                 }
             }
         })
     }
 
-    private fun switchLanguage(language: Language) {
-        if (currentLanguage != language) {
-            currentLanguage = language
-            artistAdapter.updateLanguage(language)
-            
-            val languageText = when (language) {
-                Language.SPANISH -> getString(R.string.language_spanish)
-                Language.ENGLISH -> getString(R.string.language_english)
+    private fun playSong(artist: Artist, song: Song, language: String) {
+        if (!isSpotifyConnected || !spotifyService.isConnected()) {
+            // Si Spotify no está conectado, mostrar mensaje o reintentar conexión
+            return
+        }
+        
+        currentSong = song
+        currentArtist = artist
+        currentLanguage = language
+        
+        // Update player control UI
+        updatePlayerControl()
+        
+        // Update adapter to show visual effects
+        artistAdapter.updateCurrentPlaying(artist, song, language)
+        
+        // Play the song with playback listener
+        spotifyService.playTrack(song.spotifyUri, object : SpotifyService.PlaybackListener {
+            override fun onTrackChanged(track: Track) {
+                runOnUiThread {
+                    // Track changed
+                }
             }
-            Toast.makeText(this, "Switched to $languageText", Toast.LENGTH_SHORT).show()
+
+            override fun onPlaybackStateChanged(isPaused: Boolean, position: Long, duration: Long) {
+                runOnUiThread {
+                    isPlaying = !isPaused
+                    playPauseButton.text = if (isPaused) "▶️" else "⏸️"
+                    
+                    currentPosition = position
+                    currentDuration = duration
+                    
+                    updateSeekBar()
+                    updateTimeLabels()
+                    
+                    // Iniciar o detener las actualizaciones automáticas de la seek bar
+                    if (isPlaying) {
+                        startSeekBarUpdates()
+                    } else {
+                        seekBarUpdateHandler.removeCallbacksAndMessages(null)
+                    }
+                }
+            }
+        })
+        
+        isPlaying = true
+        playPauseButton.text = "⏸️"
+    }
+    
+    private fun updatePlayerControl() {
+        currentSong?.let { song ->
+            currentArtist?.let { artist ->
+                currentLanguage?.let { language ->
+                    currentSongTitle.text = song.title
+                    
+                    // Cargar imagen del artista
+                    Glide.with(this)
+                        .load(artist.imageUrl)
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
+                        .into(currentArtistImage)
+                    
+                    // Mostrar solo la bandera del idioma
+                    when (language) {
+                        "spanish" -> currentLanguageFlag.text = "🇪🇸"
+                        "english" -> currentLanguageFlag.text = "🇺🇸"
+                    }
+                    
+                    // Show player control
+                    playerControl.visibility = View.VISIBLE
+                }
+            }
         }
     }
-
-    private fun playArtistSong(artist: Artist) {
-        val songUri = when (currentLanguage) {
-            Language.SPANISH -> artist.spanishSong
-            Language.ENGLISH -> artist.englishSong
+    
+    private fun togglePlayPause() {
+        if (!isSpotifyConnected || !spotifyService.isConnected()) {
+            return
         }
-
-        songUri?.let { uri ->
-            if (spotifyService.isConnected()) {
-                spotifyService.playTrack(uri)
-                Toast.makeText(this, "Playing ${artist.name}", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, getString(R.string.connecting_spotify), Toast.LENGTH_SHORT).show()
-                connectToSpotify()
-            }
+        
+        if (isPlaying) {
+            spotifyService.pause()
+            playPauseButton.text = "▶️"
+            isPlaying = false
+        } else {
+            spotifyService.resume()
+            playPauseButton.text = "⏸️"
+            isPlaying = true
         }
+    }
+    
+    private fun updateSeekBar() {
+        if (!isUserSeeking && currentDuration > 0) {
+            val progress = ((currentPosition * 100) / currentDuration).toInt()
+            seekBar.progress = progress
+        }
+    }
+    
+    private fun updateTimeLabels() {
+        currentTime.text = formatTime(currentPosition)
+        totalTime.text = formatTime(currentDuration)
+    }
+    
+    private fun formatTime(milliseconds: Long): String {
+        val seconds = (milliseconds / 1000) % 60
+        val minutes = (milliseconds / 1000) / 60
+        return String.format("%d:%02d", minutes, seconds)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        seekBarUpdateHandler.removeCallbacksAndMessages(null)
         spotifyService.disconnect()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Detener las actualizaciones de la seek bar
+        seekBarUpdateHandler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Reanudar las actualizaciones si hay una canción reproduciéndose
+        if (isPlaying && currentDuration > 0) {
+            startSeekBarUpdates()
+        }
+    }
+
+    private fun startSeekBarUpdates() {
+        seekBarUpdateHandler.post(object : Runnable {
+            override fun run() {
+                if (isPlaying && !isUserSeeking) {
+                    updateSeekBar()
+                    updateTimeLabels()
+                }
+                seekBarUpdateHandler.postDelayed(this, 1000) // Actualizar cada segundo
+            }
+        })
     }
 }

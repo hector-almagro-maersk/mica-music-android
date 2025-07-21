@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MicaMusic"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".SpotifyConnectionActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.MicaMusic">
@@ -31,6 +31,10 @@
                 <data android:scheme="${redirectSchemeName}" android:host="${redirectHostName}" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MicaMusic" />
     </application>
 
 </manifest>
