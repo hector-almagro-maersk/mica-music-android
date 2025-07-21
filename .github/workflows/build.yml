@@ -21,6 +21,12 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+
+      - name: Create local.properties with Spotify credentials
+        run: |
+          echo "SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }}" >> local.properties
+          echo "SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }}" >> local.properties
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
