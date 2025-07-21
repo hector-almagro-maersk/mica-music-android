@@ -2,17 +2,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'com.micamusic.app'
-    compileSdk 34
+    namespace = 'com.micamusic.app'
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "com.micamusic.app"
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        applicationId = "com.micamusic.app"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+            redirectSchemeName: "mica-music",
+            redirectHostName: "mica-music://callback"
+        ]
     }
 
     buildTypes {
@@ -29,7 +33,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
 }
 
