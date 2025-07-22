@@ -1,7 +1,7 @@
 [
   {
     "name": "Vaiana",
-    "imageUrl": "https://congresosjaca.es/wp-content/uploads/2025/01/VAIANA.jpg",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b273e6e17115e58636e3b6d6ee89",
     "artists": [
       {
         "imageUrl": "https://i.ytimg.com/vi/Grofyj1_tUI/maxresdefault.jpg",
@@ -57,12 +57,56 @@
           "title": "What could be better than this?",
           "spotifyUri": "spotify:track:1yRsuQUjZtma6KlOpwynQe"
         }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Brillante",
+          "spotifyUri": "spotify:track:11woCOcbZiXXM12G6KXW71"
+        },
+        "english": {
+          "title": "Shiny",
+          "spotifyUri": "spotify:track:7qXlsUBBEQaFhHrvMYBcuC"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Por fin",
+          "spotifyUri": "spotify:track:4y9oSNTyY77Kpw9HbRGhm4"
+        },
+        "english": {
+          "title": "We're Back",
+          "spotifyUri": "spotify:track:7rzMGJGXXkuw2IbyHqdZlp"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Márchate un Chee Hoo",
+          "spotifyUri": "spotify:track:3zA81171RH1qgVJLgQhOdH"
+        },
+        "english": {
+          "title": "Can I get a Chee Hoo?",
+          "spotifyUri": "spotify:track:09002VzEaxqBuwzdY2KQv2"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Piérdete",
+          "spotifyUri": "spotify:track:5wL1S0fbxuVyDkSk6sehUF"
+        },
+        "english": {
+          "title": "Get Lost",
+          "spotifyUri": "spotify:track:14B0uhjPvP2pJHm7HfbTAr"
+        }
       }
     ]
   },
   {
     "name": "Frozen",
-    "imageUrl": "https://static.wikia.nocookie.net/wiki-doblaje-espana/images/6/6c/Frozen_portada.png/revision/latest?cb=20221028133319&path-prefix=es",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b273389d16bb322fb4faec786a30",
     "artists": [
       {
         "imageUrl": "https://static.wikia.nocookie.net/disney/images/2/21/Let_it_Go.png/revision/latest?cb=20150228223047&path-prefix=es",
@@ -112,7 +156,7 @@
   },
   {
     "name": "Mulan",
-    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV_LZKan_MuViDKTc4CcIQlL4OT0IzPf6X3Q&s",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2733e59ff5f466b9a7e45d636b0",
     "artists": [
       {
         "imageUrl": "https://i1.sndcdn.com/artworks-H98pnSc7mpZyGPfQ-9aNElA-t500x500.jpg",
@@ -145,6 +189,351 @@
         "english": {
           "title": "A girl worth fighting for",
           "spotifyUri": "spotify:track:3wjgPeXocinhLyPL37p70e"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Hércules",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2732d0c4b0d7da7547164c1ce39",
+    "artists": [
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Canción de Meg",
+          "spotifyUri": "spotify:track:5r0oYCYfBWykOVVtwXBKvz"
+        },
+        "english": {
+          "title": "I Won't Say (I'm In Love)",
+          "spotifyUri": "spotify:track:0PKmDncVOiNQLO6D1P6PXi"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "De cero a héroe",
+          "spotifyUri": "spotify:track:1kIKCaRH85flXDJUKoxlUJ"
+        },
+        "english": {
+          "title": "Zero To Hero",
+          "spotifyUri": "spotify:track:4zDfgax6Ihb0UWdour1ZEs"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Ha nacido una estrella",
+          "spotifyUri": "spotify:track:1THvYYYksPqpaSt1dVHk4r"
+        },
+        "english": {
+          "title": "A Star Is Born",
+          "spotifyUri": "spotify:track:64Eug7tFE4KWJNQUE73BGe"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Ese es mi destino",
+          "spotifyUri": "spotify:track:4UevwBtpgyaW3eNqTdwMNM"
+        },
+        "english": {
+          "title": "Go the Distance",
+          "spotifyUri": "spotify:track:0D1OY0M5A0qD5HGBvFmFid"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Mi última esperanza",
+          "spotifyUri": "spotify:track:5tLyWXxkYlNiOlOQVViBcK"
+        },
+        "english": {
+          "title": "One Last Hope",
+          "spotifyUri": "spotify:track:0Z06gAgsGv5hsLzvC06XMP"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Aladdin",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2737a9c6dc1a061d96a65304d46",
+    "artists": [
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Un Genio Genial",
+          "spotifyUri": "spotify:track:0DXpkerT6DPHcApiGO4czX"
+        },
+        "english": {
+          "title": "Friend Like Me",
+          "spotifyUri": "spotify:track:70uZXOG2KTAHwcAgp4QyYr"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Príncipe Ali",
+          "spotifyUri": "spotify:track:6RUDPeh64ONeJ69YGt0txT"
+        },
+        "english": {
+          "title": "Prince Ali",
+          "spotifyUri": "spotify:track:6q2r0n2ph4w2p7fLbh5TKK"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Un Mundo Ideal",
+          "spotifyUri": "spotify:track:0ponZFZOMfmjBVGMjKXnnS"
+        },
+        "english": {
+          "title": "A Whole New World",
+          "spotifyUri": "spotify:track:5VIfacsWytkcgr7aTt8Tql"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "El Rey",
+          "spotifyUri": "spotify:track:66EnVVwKl74nXLfTkauWES"
+        },
+        "english": {
+          "title": "One Jump Ahead",
+          "spotifyUri": "spotify:track:4wN8Ov3kPZdkJ8XcYxYUGz"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Encanto",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b273398b33d097dfb16349ca7301",
+    "artists": [
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "No se habla de Bruno",
+          "spotifyUri": "spotify:track:5QKk5N5xJQGsWMhPM80Kfv"
+        },
+        "english": {
+          "title": "We Don't Talk About Bruno",
+          "spotifyUri": "spotify:track:52xJxFP6TqMuO4Yt0eOkMz"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "En lo profundo",
+          "spotifyUri": "spotify:track:0c5Ge9KsdXDP1djyhhmk5x"
+        },
+        "english": {
+          "title": "Surface Pressure",
+          "spotifyUri": "spotify:track:760jhRscwGbIIe1m1IIQpU"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Dos Oruguitas",
+          "spotifyUri": "spotify:track:5rohUzwEoRsUvAA1Bf3DLo"
+        },
+        "english": {
+          "title": "Two Oruguitas",
+          "spotifyUri": "spotify:track:6jPVyjPqp2BNUJnDSwm8tK"
+        }
+      }
+      ,
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Un regalo mágico",
+          "spotifyUri": "spotify:track:2RNhU3kHxwlQzCqYshCRmw"
+        },
+        "english": {
+          "title": "Waiting on a Miracle",
+          "spotifyUri": "spotify:track:3oRW9ZGPRbLRMneQ5lwflt"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Inspiración",
+          "spotifyUri": "spotify:track:0luqiaAZqlVRhwVpooWC8s"
+        },
+        "english": {
+          "title": "What Else Can I Do?",
+          "spotifyUri": "spotify:track:3XoYqtiWHhsk59frZupImG"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "La Familia Madrigal",
+          "spotifyUri": "spotify:track:6740sbqgB64LZopHUEiBG8"
+        },
+        "english": {
+          "title": "The Family Madrigal",
+          "spotifyUri": "spotify:track:4b1yxSdlumA8N4fEk4UOZp"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Enredados",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b273b30f2e44ae6fa43305bd00bf",
+    "artists": [
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Cuando mi vida va a comenzar",
+          "spotifyUri": "spotify:track:3pi3G64D1hqJrsXd7t4eUb"
+        },
+        "english": {
+          "title": "When Will My Life Begin?",
+          "spotifyUri": "spotify:track:0zSxss7OB64DbEyhh5ARCi"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Madre sabe más",
+          "spotifyUri": "spotify:track:6QcDbjxy71Gl7GkGUabYrj"
+        },
+        "english": {
+          "title": "Mother Knows Best",
+          "spotifyUri": "spotify:track:1lOSxJNCLvWm2bYaTcTSmK"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Por fin ya veo la luz",
+          "spotifyUri": "spotify:track:3cx1sqojP9LSfvFLN7T4M8"
+        },
+        "english": {
+          "title": "I See the Light",
+          "spotifyUri": "spotify:track:0ssiA347C7W2OkFInzvnBF"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Mi sueño es",
+          "spotifyUri": "spotify:track:5wTGlfbkoeepUACw2ZLx2l"
+        },
+        "english": {
+          "title": "I've Got a Dream",
+          "spotifyUri": "spotify:track:3QvZUbMhFBdUTmegQSkRH6"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Tarzán",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b273ba44f1ff74c2c7c2da6e4c3f",
+    "artists": [
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "En mi corazón vivirás",
+          "spotifyUri": "spotify:track:7tgR5zkdJzZc5OgMBwhwwx"
+        },
+        "english": {
+          "title": "You'll Be In My Heart",
+          "spotifyUri": "spotify:track:4Y8vb1uy9IjM2V1hqvrAid"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Hijo de hombre",
+          "spotifyUri": "spotify:track:52lhNRar6eRdHwcO4u5KkY"
+        },
+        "english": {
+          "title": "Son of Man",
+          "spotifyUri": "spotify:track:1LhFadk0aWYczltTjIbFlI"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Dos mundos",
+          "spotifyUri": "spotify:track:4ytKq6A16pvpQG45qSxoIZ"
+        },
+        "english": {
+          "title": "Two Worlds",
+          "spotifyUri": "spotify:track:3icOFPIciIN8FQSyVlpYSF"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Lo extraño que soy",
+          "spotifyUri": "spotify:track:1YrKHg6mIS9yYCpt1TH792"
+        },
+        "english": {
+          "title": "Strangers Like Me",
+          "spotifyUri": "spotify:track:3T74kgnbHw8JqkYGJKD4Tl"
+        }
+      }
+    ]
+  },
+  {
+    "name": "El Rey León",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b27356e869daafe3171fb565bcfa",
+    "artists": [
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "El ciclo de la vida",
+          "spotifyUri": "spotify:track:0mviReRqO7CljJmjy9nZeA"
+        },
+        "english": {
+          "title": "Circle of Life",
+          "spotifyUri": "spotify:track:0HU5JnVaKNTWf6GykV9Zn8"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Yo voy a ser Rey León",
+          "spotifyUri": "spotify:track:64U9po8RNXF1ZHc2SgCn8i"
+        },
+        "english": {
+          "title": "I Just Can't Wait to Be King",
+          "spotifyUri": "spotify:track:0qxtQ8rf3W1nId3D2r0xH4"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Hakuna Matata",
+          "spotifyUri": "spotify:track:12OKJ3ZsravTrEtU20sbYE"
+        },
+        "english": {
+          "title": "Hakuna Matata",
+          "spotifyUri": "spotify:track:5k3U0OGYBccHdKJJu3HrUN"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Es la noche del amor",
+          "spotifyUri": "spotify:track:32iXhcItFFeqyjGrwv1l1T"
+        },
+        "english": {
+          "title": "Can You Feel the Love Tonight",
+          "spotifyUri": "spotify:track:5E8yddtSG3sH4hw2SfwcgW"
+        }
+      },
+      {
+        "imageUrl": "",
+        "spanish": {
+          "title": "Preparaos",
+          "spotifyUri": "spotify:track:7GGY5tkZVLyjIbWFxf4kEC"
+        },
+        "english": {
+          "title": "Be Prepared",
+          "spotifyUri": "spotify:track:34nxgXFCPzDphUJGuRsn10"
         }
       }
     ]
