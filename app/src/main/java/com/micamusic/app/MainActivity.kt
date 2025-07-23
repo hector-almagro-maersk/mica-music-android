@@ -207,8 +207,9 @@ class MainActivity : AppCompatActivity() {
                     currentSongTitle.text = song.title
                     
                     // Cargar imagen del artista
+                    val localImagePath = if (artist.imageUrl.isNotBlank()) "file:///android_asset/songs/" + artist.imageUrl else null
                     Glide.with(this)
-                        .load(artist.imageUrl)
+                        .load(localImagePath)
                         .placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.ic_launcher)
                         .into(currentArtistImage)
