@@ -7,22 +7,26 @@
         "imageUrl": "https://i.ytimg.com/vi/Grofyj1_tUI/maxresdefault.jpg",
         "spanish": {
           "title": "Que hay mas alla",
-          "spotifyUri": "spotify:track:6orRFPOpyksp2Hgh7KDehQ"
+          "spotifyUri": "spotify:track:6orRFPOpyksp2Hgh7KDehQ",
+          "albumTrackId": "spotify:album:6orvJ0mSDnGZT1PD7FpGqZ"
         },
         "english": {
           "title": "How far I'll go",
-          "spotifyUri": "spotify:track:3KzemxaWSSiYtnzOokd0Rs"
+          "spotifyUri": "spotify:track:3KzemxaWSSiYtnzOokd0Rs",
+          "albumTrackId": "spotify:album:6orvJ0mSDnGZT1PD7FpGqZ"
         }
       },
       {
         "imageUrl": "https://static.wikia.nocookie.net/disney/images/6/6f/Profile_-_Maui.jpeg/revision/latest/scale-to-width-down/1200?cb=20250309150414",
         "spanish": {
           "title": "De nada",
-          "spotifyUri": "spotify:track:7MQAFitcX50Vw3IuG3qXbj"
+          "spotifyUri": "spotify:track:7MQAFitcX50Vw3IuG3qXbj",
+          "albumTrackId": "spotify:album:6orvJ0mSDnGZT1PD7FpGqZ"
         },
         "english": {
           "title": "You're Welcome",
-          "spotifyUri": "spotify:track:1gAqEg0gMyxJrM4DOOaYEA"
+          "spotifyUri": "spotify:track:1gAqEg0gMyxJrM4DOOaYEA",
+          "albumTrackId": "spotify:album:6orvJ0mSDnGZT1PD7FpGqZ"
         }
       },
       {
@@ -112,11 +116,13 @@
         "imageUrl": "https://static.wikia.nocookie.net/disney/images/2/21/Let_it_Go.png/revision/latest?cb=20150228223047&path-prefix=es",
         "spanish": {
           "title": "¡Suéltalo!",
-          "spotifyUri": "spotify:track:59g9tRMoYFB0eVeqamx3Pp"
+          "spotifyUri": "spotify:track:59g9tRMoYFB0eVeqamx3Pp",
+          "albumTrackId": "spotify:album:7qUHKX3PwmAoH4rQj7V6n5"
         },
         "english": {
           "title": "Let it go",
-          "spotifyUri": "spotify:track:600HVBpzF1WfBdaRwbEvLz"
+          "spotifyUri": "spotify:track:600HVBpzF1WfBdaRwbEvLz",
+          "albumTrackId": "spotify:album:7qUHKX3PwmAoH4rQj7V6n5"
         }
       },
       {
