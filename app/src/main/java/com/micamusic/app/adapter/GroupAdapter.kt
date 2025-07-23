@@ -54,8 +54,9 @@ class GroupAdapter(
 
         fun bind(group: SongGroup) {
             groupName.text = group.name
+            val localImagePath = if (group.imageUrl.isNotBlank()) "file:///android_asset/songs/" + group.imageUrl else null
             Glide.with(itemView.context)
-                .load(group.imageUrl)
+                .load(localImagePath)
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
                 .into(groupImage)

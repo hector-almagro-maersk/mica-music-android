@@ -61,21 +61,22 @@ class ArtistAdapter(
         private val englishGlowEffect: View = itemView.findViewById(R.id.englishGlowEffect)
 
         fun bind(artist: Artist) {
-            // Load artist image
+            // Load artist image from assets/songs/{imageUrl}
+            val localImagePath = if (artist.imageUrl.isNotBlank()) "file:///android_asset/songs/" + artist.imageUrl else null
             Glide.with(itemView.context)
-                .load(artist.imageUrl)
+                .load(localImagePath)
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
                 .into(artistImage)
-            
+
             // Check if this artist/song is currently playing
-            val isSpanishPlaying = currentPlayingArtist == artist && 
-                                 currentPlayingSong == artist.spanish && 
+            val isSpanishPlaying = currentPlayingArtist == artist &&
+                                 currentPlayingSong == artist.spanish &&
                                  currentPlayingLanguage == "spanish"
-            val isEnglishPlaying = currentPlayingArtist == artist && 
-                                 currentPlayingSong == artist.english && 
+            val isEnglishPlaying = currentPlayingArtist == artist &&
+                                 currentPlayingSong == artist.english &&
                                  currentPlayingLanguage == "english"
-            
+
             // Configure Spanish column
             setupLanguageColumn(
                 column = spanishColumn,

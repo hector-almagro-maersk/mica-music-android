@@ -20,13 +20,19 @@
         android:clickable="true"
         android:focusable="true">
 
-        <ImageView
-            android:id="@+id/groupImage"
+        <FrameLayout
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginEnd="16dp"
-            android:scaleType="centerCrop"
-            tools:src="@mipmap/ic_launcher" />
+            android:background="@drawable/vaiana_style_border"
+            android:padding="2dp">
+            <ImageView
+                android:id="@+id/groupImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_launcher" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/groupName"

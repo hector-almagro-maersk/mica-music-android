@@ -17,14 +17,19 @@
         android:padding="16dp">
 
         <!-- Columna 1: Imagen del artista -->
-        <ImageView
-            android:id="@+id/artistImage"
+        <FrameLayout
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/gray"
-            android:scaleType="centerCrop"
-            tools:src="@mipmap/ic_launcher" />
+            android:background="@drawable/vaiana_style_border"
+            android:padding="2dp">
+            <ImageView
+                android:id="@+id/artistImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_launcher" />
+        </FrameLayout>
 
         <!-- Columna 2: Canción en español -->
         <FrameLayout
