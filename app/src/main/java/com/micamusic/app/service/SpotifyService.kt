@@ -37,6 +37,11 @@ class SpotifyService(private val context: Context) {
         fun onPlaybackStateChanged(isPaused: Boolean, position: Long, duration: Long)
     }
 
+    interface PremiumStatusListener {
+        fun onPremiumStatusChecked(isPremium: Boolean)
+        fun onPremiumStatusError(error: Throwable)
+    }
+
     fun connect(listener: SpotifyConnectionListener) {
         if (BuildConfig.SIMULATE_SPOTIFY_SUCCESS) {
             // Simula éxito inmediato
@@ -89,7 +94,7 @@ class SpotifyService(private val context: Context) {
     fun playTrack(trackUri: String, playbackListener: PlaybackListener? = null) {
         spotifyAppRemote?.let { remote ->
             try {
-                // Set repeat mode to ONE (repeat current song)
+                // Set repeat mode to ONE (repeat current song) for individual track play
                 remote.playerApi.setRepeat(1) // 1 = Repeat.ONE
                     .setResultCallback {
                         Log.d(TAG, "Repeat mode set to ONE (repeat current track)")
@@ -130,6 +135,61 @@ class SpotifyService(private val context: Context) {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Exception in playTrack", e)
+            }
+        } ?: run {
+            Log.e(TAG, "SpotifyAppRemote is not connected")
+        }
+    }
+
+    fun playFilmTracks(trackUris: List<String>, playbackListener: PlaybackListener? = null) {
+        spotifyAppRemote?.let { remote ->
+            try {
+                if (trackUris.isNotEmpty()) {
+                    // Set repeat mode to ALL (repeat context/playlist) for film songs
+                    remote.playerApi.setRepeat(2) // 2 = Repeat.ALL
+                        .setResultCallback {
+                            Log.d(TAG, "Repeat mode set to ALL (repeat film songs)")
+                        }
+                        .setErrorCallback { error ->
+                            Log.e(TAG, "Failed to set repeat mode", error)
+                        }
+
+                    // Play the first track in the list
+                    remote.playerApi.play(trackUris.first())
+                        .setResultCallback {
+                            Log.d(TAG, "Playing film tracks starting with: ${trackUris.first()}")
+                            acquireWakeLock()
+                        }
+                        .setErrorCallback { error ->
+                            Log.e(TAG, "Failed to play film tracks", error)
+                        }
+
+                    // Subscribe to player state changes if listener provided
+                    playbackListener?.let { listener ->
+                        playerStateSubscription?.cancel()
+                        
+                        remote.playerApi.subscribeToPlayerState()
+                            .setEventCallback { playerState ->
+                                try {
+                                    listener.onTrackChanged(playerState.track)
+                                    listener.onPlaybackStateChanged(
+                                        playerState.isPaused,
+                                        playerState.playbackPosition,
+                                        playerState.track.duration
+                                    )
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "Error in film playback listener", e)
+                                }
+                            }
+                            .setErrorCallback { error ->
+                                Log.e(TAG, "Error subscribing to player state for film", error)
+                            }
+                    }
+                } else {
+                    Log.w(TAG, "No tracks to play for film")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception in playFilmTracks", e)
             }
         } ?: run {
             Log.e(TAG, "SpotifyAppRemote is not connected")
@@ -217,5 +277,35 @@ class SpotifyService(private val context: Context) {
 
     fun isConnected(): Boolean {
         return spotifyAppRemote != null
+    }
+
+    fun checkPremiumStatus(listener: PremiumStatusListener) {
+        if (BuildConfig.SIMULATE_SPOTIFY_SUCCESS) {
+            // For simulation, assume user has premium
+            listener.onPremiumStatusChecked(true)
+            return
+        }
+
+        spotifyAppRemote?.let { remote ->
+            try {
+                remote.userApi.getCapabilities()
+                    .setResultCallback { capabilities ->
+                        // Check if user can play on demand (Premium feature)
+                        val isPremium = capabilities.canPlayOnDemand
+                        Log.d(TAG, "Premium status checked: $isPremium")
+                        listener.onPremiumStatusChecked(isPremium)
+                    }
+                    .setErrorCallback { error ->
+                        Log.e(TAG, "Failed to check premium status", error)
+                        listener.onPremiumStatusError(error)
+                    }
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception checking premium status", e)
+                listener.onPremiumStatusError(e)
+            }
+        } ?: run {
+            Log.e(TAG, "SpotifyAppRemote is not connected when checking premium status")
+            listener.onPremiumStatusError(Exception("Spotify not connected"))
+        }
     }
 }

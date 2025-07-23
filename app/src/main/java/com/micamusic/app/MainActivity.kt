@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private var currentArtist: Artist? = null
     private var currentLanguage: String? = null
     private var isSpotifyConnected = false
+    private var isSpotifyPremium = false
     
     // Para actualizar la seek bar
     private val seekBarUpdateHandler = Handler(Looper.getMainLooper())
@@ -79,7 +80,8 @@ class MainActivity : AppCompatActivity() {
         
         groupAdapter = GroupAdapter(
             groups = songGroups,
-            onSongClick = { artist, song, language -> playSong(artist, song, language) }
+            onSongClick = { artist, song, language -> playSong(artist, song, language) },
+            onAlbumPlayClick = { group, language -> playAlbum(group, language) }
         )
         
         recyclerView.apply {
@@ -129,7 +131,8 @@ class MainActivity : AppCompatActivity() {
                 runOnUiThread {
                     // Conexión exitosa
                     isSpotifyConnected = true
-                    // Ya no necesitamos mostrar mensaje de "conectando"
+                    // Check Premium status after successful connection
+                    checkSpotifyPremiumStatus()
                 }
             }
 
@@ -198,6 +201,102 @@ class MainActivity : AppCompatActivity() {
         
         isPlaying = true
         playPauseButton.text = "⏸️"
+    }
+
+    private fun checkSpotifyPremiumStatus() {
+        spotifyService.checkPremiumStatus(object : SpotifyService.PremiumStatusListener {
+            override fun onPremiumStatusChecked(isPremium: Boolean) {
+                runOnUiThread {
+                    isSpotifyPremium = isPremium
+                    updateUIForAccountType()
+                }
+            }
+
+            override fun onPremiumStatusError(error: Throwable) {
+                runOnUiThread {
+                    // On error, assume non-premium for safety
+                    isSpotifyPremium = false
+                    updateUIForAccountType()
+                }
+            }
+        })
+    }
+
+    private fun updateUIForAccountType() {
+        groupAdapter.setSpotifyPremium(isSpotifyPremium)
+    }
+
+    private fun playAlbum(group: SongGroup, language: String) {
+        if (!isSpotifyConnected || !spotifyService.isConnected()) {
+            return
+        }
+
+        // Collect all track URIs from the group for the specified language
+        val trackUris = group.artists.mapNotNull { artist ->
+            when (language) {
+                "spanish" -> artist.spanish?.spotifyUri
+                "english" -> artist.english?.spotifyUri
+                else -> null
+            }
+        }
+
+        if (trackUris.isNotEmpty()) {
+            // Update current playing info with the first song
+            val firstArtist = group.artists.find { artist ->
+                when (language) {
+                    "spanish" -> artist.spanish != null
+                    "english" -> artist.english != null
+                    else -> false
+                }
+            }
+            val firstSong = when (language) {
+                "spanish" -> firstArtist?.spanish
+                "english" -> firstArtist?.english
+                else -> null
+            }
+
+            currentSong = firstSong
+            currentArtist = firstArtist
+            currentLanguage = language
+
+            // Update player control UI
+            updatePlayerControl()
+
+            // Update adapter to show visual effects
+            groupAdapter.setCurrentPlaying(firstArtist, firstSong, language)
+
+            // Play all film tracks in loop
+            spotifyService.playFilmTracks(trackUris, object : SpotifyService.PlaybackListener {
+                override fun onTrackChanged(track: Track) {
+                    runOnUiThread {
+                        // Track changed
+                    }
+                }
+
+                override fun onPlaybackStateChanged(isPaused: Boolean, position: Long, duration: Long) {
+                    runOnUiThread {
+                        isPlaying = !isPaused
+                        playPauseButton.text = if (isPaused) "▶️" else "⏸️"
+                        
+                        currentPosition = position
+                        currentDuration = duration
+                        lastUpdateTime = System.currentTimeMillis()
+                        
+                        updateSeekBar()
+                        updateTimeLabels()
+                        
+                        if (isPlaying) {
+                            startSeekBarUpdates()
+                        } else {
+                            seekBarUpdateHandler.removeCallbacksAndMessages(null)
+                        }
+                    }
+                }
+            })
+
+            isPlaying = true
+            playPauseButton.text = "⏸️"
+        }
     }
     
     private fun updatePlayerControl() {

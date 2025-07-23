@@ -46,6 +46,40 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_expand_more" />
 
+        <!-- Album play flags for non-premium users -->
+        <LinearLayout
+            android:id="@+id/albumPlayFlags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/albumSpanishFlag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:text="🇪🇸"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/albumEnglishFlag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:text="🇺🇸"
+                android:textSize="28sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
